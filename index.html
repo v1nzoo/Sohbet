@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canlı Sohbet</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="name-modal" class="modal">
+    <div class="modal-content">
+      <h3>Sohbete Hoş Geldiniz</h3>
+      <input type="text" id="username-input" placeholder="İsminizi yazın...">
+      <button id="save-name-btn">Giriş Yap</button>
+    </div>
+  </div>
+
+  <div class="chat-container">
+    <div id="messages-box" class="messages-box"></div>
+    <form id="chat-form" class="chat-input-area">
+      <input type="text" id="message-input" placeholder="Mesaj yaz..." required autocomplete="off">
+      <button type="submit">Gönder</button>
+    </form>
+  </div>
+
+  <!-- Firebase SDK (Script sürümleri) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
