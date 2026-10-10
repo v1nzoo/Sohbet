@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded, onChildRemoved, remove } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
 
-// Firebase Yapılandırması
 const firebaseConfig = {
   apiKey: "AIzaSyD1sabf2vO_5YOnk5R3wK9gJYHE68Oh5rM",
   authDomain: "sohbet-8f84b.firebaseapp.com",
@@ -13,16 +12,14 @@ const firebaseConfig = {
   measurementId: "G-QWCF8B2F6R"
 };
 
-// Moderatör İsim Tanımı
-const MODERATOR_NAME = "canz";
+const MODERATOR_NAME = "Mehmed Emin";
 
-// Firebase Başlatma
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-// DOM Elemanları
 const modal = document.getElementById("name-modal");
 const usernameInput = document.getElementById("username-input");
+const ppInput = document.getElementById("pp-input");
 const saveNameBtn = document.getElementById("save-name-btn");
 const changeNameBtn = document.getElementById("change-name-btn");
 const userBadge = document.getElementById("current-user-badge");
@@ -31,6 +28,7 @@ const messageInput = document.getElementById("message-input");
 const messagesBox = document.getElementById("messages-box");
 
 let currentUsername = localStorage.getItem("chat_username") || "";
+let currentPP = localStorage.getItem("chat_pp") || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
 
 function updateUI() {
   if (currentUsername) {
@@ -44,30 +42,35 @@ function updateUI() {
 
 updateUI();
 
-// İsim Kaydetme
 saveNameBtn.addEventListener("click", () => {
   const name = usernameInput.value.trim();
+  const pp = ppInput.value.trim();
   if (name) {
     currentUsername = name;
     localStorage.setItem("chat_username", name);
+    if (pp) {
+      currentPP = pp;
+      localStorage.setItem("chat_pp", pp);
+    }
     usernameInput.value = "";
+    ppInput.value = "";
     updateUI();
   }
 });
 
-// İsim Değiştirme Butonu
 changeNameBtn.addEventListener("click", () => {
   usernameInput.value = currentUsername;
+  ppInput.value = currentPP;
   modal.style.display = "flex";
 });
 
-// Mesaj Gönderme
 chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const text = messageInput.value.trim();
   if (text && currentUsername) {
     push(ref(database, "messages"), {
       sender: currentUsername,
+      pp: currentPP,
       text: text,
       timestamp: Date.now()
     });
@@ -75,40 +78,38 @@ chatForm.addEventListener("submit", (e) => {
   }
 });
 
-// Yeni Mesaj Geldiğinde
 onChildAdded(ref(database, "messages"), (snapshot) => {
   const msgKey = snapshot.key;
   const data = snapshot.val();
   
-  const messageCard = document.createElement("div");
-  messageCard.classList.add("message-card");
-  messageCard.id = `msg-${msgKey}`;
+  const messageWrapper = document.createElement("div");
+  messageWrapper.classList.add("message-wrapper");
+  messageWrapper.id = `msg-${msgKey}`;
   
-  if (data.sender === currentUsername) {
-    messageCard.classList.add("my-message");
+  const isMyMessage = data.sender === currentUsername;
+  if (isMyMessage) {
+    messageWrapper.classList.add("my-message");
   }
   
   const isMod = currentUsername.trim().toLowerCase() === MODERATOR_NAME.toLowerCase();
-  
-  let deleteButtonHTML = "";
-  if (isMod) {
-    deleteButtonHTML = `<button class="delete-btn" title="Mesajı Sil" data-id="${msgKey}">🗑️</button>`;
-  }
+  let deleteButtonHTML = isMod ? `<button class="delete-btn" data-id="${msgKey}">Sil</button>` : "";
 
-  messageCard.innerHTML = `
-    <div class="message-header">
-      <span class="sender-name">${data.sender}</span>
-      ${deleteButtonHTML}
+  messageWrapper.innerHTML = `
+    <img src="${data.pp || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}" class="message-pp" alt="PP">
+    <div class="message-card">
+      <div class="message-header">
+        <span class="sender-name">${data.sender}</span>
+        ${deleteButtonHTML}
+      </div>
+      <div class="message-text">${escapeHTML(data.text)}</div>
     </div>
-    <div class="message-text">${escapeHTML(data.text)}</div>
   `;
   
-  messagesBox.appendChild(messageCard);
+  messagesBox.appendChild(messageWrapper);
   messagesBox.scrollTop = messagesBox.scrollHeight;
 
-  // Moderatör silme tıklaması
   if (isMod) {
-    const delBtn = messageCard.querySelector(".delete-btn");
+    const delBtn = messageWrapper.querySelector(".delete-btn");
     if (delBtn) {
       delBtn.addEventListener("click", () => {
         remove(ref(database, `messages/${msgKey}`));
@@ -117,16 +118,12 @@ onChildAdded(ref(database, "messages"), (snapshot) => {
   }
 });
 
-// Mesaj Silindiğinde Canlı Olarak Ekrandan Kaldır
 onChildRemoved(ref(database, "messages"), (snapshot) => {
   const msgKey = snapshot.key;
-  const card = document.getElementById(`msg-${msgKey}`);
-  if (card) {
-    card.remove();
-  }
+  const wrapper = document.getElementById(`msg-${msgKey}`);
+  if (wrapper) wrapper.remove();
 });
 
-// Güvenlik için HTML Escape Fonksiyonu
 function escapeHTML(str) {
   return str.replace(/[&<>'"]/g, 
     tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
