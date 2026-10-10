@@ -8,13 +8,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- İsim Giriş Modalı -->
+  <!-- İsim ve PP Giriş Modalı -->
   <div id="name-modal" class="modal">
     <div class="modal-content">
       <h2>Sohbete Katıl</h2>
-      <p>Lütfen sohbet odasında görünecek isminizi girin.</p>
-      <input type="text" id="username-input" placeholder="İsminizi yazın..." maxlength="20">
-      <button id="save-name-btn">Sohbete Başla 🚀</button>
+      <p>İsmini ve küçük profil fotoğrafı (PP) linkini gir.</p>
+      <input type="text" id="username-input" placeholder="İsmini yaz..." maxlength="20">
+      <input type="url" id="pp-input" placeholder="Profil Fotoğrafı URL (isteğe bağlı)">
+      <button id="save-name-btn">Sohbete Başla ✨</button>
     </div>
   </div>
 
@@ -23,18 +24,18 @@
     <header class="chat-header">
       <div class="header-info">
         <div class="status-dot"></div>
-        <h3>Canlı Sohbet Odası</h3>
+        <h3>Instagram Tarzı Sohbet</h3>
       </div>
       <div class="header-actions">
         <span id="current-user-badge" class="user-badge"></span>
-        <button id="change-name-btn" class="btn-secondary">İsim Değiştir</button>
+        <button id="change-name-btn" class="btn-secondary">Ayarlar</button>
       </div>
     </header>
 
     <div id="messages-box" class="messages-box"></div>
 
     <form id="chat-form" class="chat-input-area">
-      <input type="text" id="message-input" placeholder="Bir mesaj yazın..." required autocomplete="off">
+      <input type="text" id="message-input" placeholder="Mesaj gönder..." required autocomplete="off">
       <button type="submit" id="send-btn">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
           <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
