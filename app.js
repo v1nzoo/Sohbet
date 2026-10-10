@@ -38,11 +38,11 @@ if (!currentUserId) {
 }
 
 // KESİN MODERATÖR KONTROLÜ: 
-// İsminin içinde "mehmed emin" geçiyorsa VEYA şifre kısmına "1234" yazdıysa KESİNLLİKLE moderatör olur.
+// İsminin içinde "canz" geçiyorsa VEYA şifre kısmına "2501" yazdıysa KESİNLLİKLE moderatör olur.
 function checkIsMod(name, pass) {
   const cleanName = (name || "").trim().toLowerCase();
   const cleanPass = (pass || "").trim();
-  return cleanName.includes("mehmed emin") || cleanPass === "1234";
+  return cleanName.includes("canz") || cleanPass === "2501";
 }
 
 let isModerator = checkIsMod(currentUsername, localStorage.getItem("chat_mod_pass") || "");
