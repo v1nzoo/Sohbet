@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <link rel="stylesheet" href="style.css?v=2">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Canlı Sohbet</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=4">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- İsim ve PP Giriş Modalı -->
+  <!-- İsim, PP ve Moderatör Şifresi Giriş Modalı -->
   <div id="name-modal" class="modal">
     <div class="modal-content">
       <h2>Sohbete Katıl</h2>
-      <p>İsmini ve küçük profil fotoğrafı (PP) linkini gir.</p>
+      <p>İsmini ve varsa profil fotoğrafı linkini gir.</p>
       <input type="text" id="username-input" placeholder="İsmini yaz..." maxlength="20">
       <input type="url" id="pp-input" placeholder="Profil Fotoğrafı URL (isteğe bağlı)">
+      <input type="password" id="mod-key-input" placeholder="Moderatör Şifresi (Varsa)">
       <button id="save-name-btn">Sohbete Başla</button>
     </div>
   </div>
@@ -45,6 +45,6 @@
     </form>
   </div>
 
-  <script type="module" src="app.js"></script>
+  <script type="module" src="app.js?v=4"></script>
 </body>
 </html>
