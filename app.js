@@ -34,18 +34,24 @@ let currentUserId = localStorage.getItem("chat_userid") || "";
 
 if (!currentUserId) {
   currentUserId = 'user_' + Math.random().toString(36).substr(2, 9);
-  localStorage.setItem("chat_userid", currentUserId);
+  localStorage.getItem("chat_userid") ? null : localStorage.setItem("chat_userid", currentUserId);
 }
 
-// KESİN MODERATÖR KONTROLÜ: 
-// İsminin içinde "canz" geçiyorsa VEYA şifre kısmına "2501" yazdıysa KESİNLLİKLE moderatör olur.
+// Moderatör hafızası: Daha önce şifreyle girildiyse veya hafızada true kaldıysa direkt mod olur
+let isModerator = localStorage.getItem("chat_is_mod") === "true";
+
 function checkIsMod(name, pass) {
   const cleanName = (name || "").trim().toLowerCase();
   const cleanPass = (pass || "").trim();
-  return cleanName.includes("canz") || cleanPass === "2501";
+  // Eğer daha önceden mod olduysa ya da bu oturumda şifre/isim eşleştiyse
+  return isModerator || cleanName.includes("mehmed emin") || cleanPass === "1234";
 }
 
-let isModerator = checkIsMod(currentUsername, localStorage.getItem("chat_mod_pass") || "");
+// Başlangıçta isme göre de kontrol et
+isModerator = checkIsMod(currentUsername, "");
+if (isModerator) {
+  localStorage.setItem("chat_is_mod", "true");
+}
 
 function updateUI() {
   if (currentUsername) {
@@ -72,12 +78,11 @@ saveNameBtn.addEventListener("click", () => {
       localStorage.setItem("chat_pp", pp);
     }
 
-    if (pass) {
-      localStorage.setItem("chat_mod_pass", pass);
+    // Şifre girildiyse veya isim mehmed emin ise moderatör yap
+    if (checkIsMod(name, pass)) {
+      isModerator = true;
+      localStorage.setItem("chat_is_mod", "true");
     }
-
-    isModerator = checkIsMod(name, pass);
-    localStorage.setItem("chat_is_mod", isModerator ? "true" : "false");
 
     usernameInput.value = "";
     ppInput.value = "";
