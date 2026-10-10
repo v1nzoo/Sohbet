@@ -12,8 +12,6 @@ const firebaseConfig = {
   measurementId: "G-QWCF8B2F6R"
 };
 
-const MODERATOR_NAME = "canz";
-const MODERATOR_PASS = "2501";
 const DEFAULT_PP = "https://ui-avatars.com/api/?background=0095f6&color=fff&name=";
 
 const app = initializeApp(firebaseConfig);
@@ -32,12 +30,22 @@ const messagesBox = document.getElementById("messages-box");
 
 let currentUsername = localStorage.getItem("chat_username") || "";
 let currentPP = localStorage.getItem("chat_pp") || "";
-let isModerator = localStorage.getItem("chat_is_mod") === "true";
+let currentUserId = localStorage.getItem("chat_userid") || "";
 
+if (!currentUserId) {
+  currentUserId = 'user_' + Math.random().toString(36).substr(2, 9);
+  localStorage.setItem("chat_userid", currentUserId);
+}
+
+// KESİN MODERATÖR KONTROLÜ: 
+// İsminin içinde "mehmed emin" geçiyorsa VEYA şifre kısmına "1234" yazdıysa KESİNLLİKLE moderatör olur.
 function checkIsMod(name, pass) {
   const cleanName = (name || "").trim().toLowerCase();
-  return cleanName === MODERATOR_NAME || pass === MODERATOR_PASS;
+  const cleanPass = (pass || "").trim();
+  return cleanName.includes("mehmed emin") || cleanPass === "1234";
 }
+
+let isModerator = checkIsMod(currentUsername, localStorage.getItem("chat_mod_pass") || "");
 
 function updateUI() {
   if (currentUsername) {
@@ -59,8 +67,14 @@ saveNameBtn.addEventListener("click", () => {
     currentUsername = name;
     localStorage.setItem("chat_username", name);
 
-    currentPP = pp;
-    localStorage.setItem("chat_pp", pp);
+    if (pp) {
+      currentPP = pp;
+      localStorage.setItem("chat_pp", pp);
+    }
+
+    if (pass) {
+      localStorage.setItem("chat_mod_pass", pass);
+    }
 
     isModerator = checkIsMod(name, pass);
     localStorage.setItem("chat_is_mod", isModerator ? "true" : "false");
@@ -85,6 +99,7 @@ chatForm.addEventListener("submit", (e) => {
   const text = messageInput.value.trim();
   if (text && currentUsername) {
     push(ref(database, "messages"), {
+      userId: currentUserId,
       sender: currentUsername,
       pp: currentPP || (DEFAULT_PP + encodeURIComponent(currentUsername)),
       text: text,
@@ -102,7 +117,7 @@ onChildAdded(ref(database, "messages"), (snapshot) => {
   messageWrapper.classList.add("message-wrapper");
   messageWrapper.id = `msg-${msgKey}`;
 
-  const isMyMessage = data.sender === currentUsername;
+  const isMyMessage = data.userId === currentUserId;
   if (isMyMessage) {
     messageWrapper.classList.add("my-message");
   }
