@@ -44,7 +44,7 @@ function checkIsMod(name, pass) {
   const cleanName = (name || "").trim().toLowerCase();
   const cleanPass = (pass || "").trim();
   // Eğer daha önceden mod olduysa ya da bu oturumda şifre/isim eşleştiyse
-  return isModerator || cleanName.includes("mehmed emin") || cleanPass === "1234";
+  return isModerator || cleanName.includes("canz") || cleanPass === "2501";
 }
 
 // Başlangıçta isme göre de kontrol et
