@@ -12,8 +12,8 @@ const firebaseConfig = {
   measurementId: "G-QWCF8B2F6R"
 };
 
-const MODERATOR_NAME = "mehmed emin";
-const MODERATOR_PASS = "1234";
+const MODERATOR_NAME = "canz";
+const MODERATOR_PASS = "2501";
 const DEFAULT_PP = "https://ui-avatars.com/api/?background=0095f6&color=fff&name=";
 
 const app = initializeApp(firebaseConfig);
