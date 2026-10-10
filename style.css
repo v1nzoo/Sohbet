@@ -203,7 +203,7 @@ body {
 }
 
 .message-wrapper.my-message .message-card {
-  background: #0095f6; /* Instagram mavisi */
+  background: #0095f6;
   color: white;
   border-radius: 18px 18px 4px 18px;
 }
