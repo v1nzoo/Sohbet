@@ -4,15 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Canlı Sohbet</title>
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Identity Services (Google ile Giriş Kütüphanesi) -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-  <!-- İsim, PP ve Moderatör Şifresi Giriş Modalı -->
+  <!-- Giriş Modalı -->
   <div id="name-modal" class="modal">
     <div class="modal-content">
       <h2>Sohbete Katıl</h2>
-      <p>İsmini ve varsa profil fotoğrafı linkini gir.</p>
+      <p>Hızlıca katılmak için Google hesabınla giriş yap ya da ismini manuel yaz.</p>
+      
+      <!-- Google ile Giriş Butonu -->
+      <div id="google-signin-container" style="display: flex; justify-content: center; margin-bottom: 15px;"></div>
+      
+      <div class="divider"><span>veya manuel devam et</span></div>
+
       <input type="text" id="username-input" placeholder="İsmini yaz..." maxlength="20">
       <input type="url" id="pp-input" placeholder="Profil Fotoğrafı URL (isteğe bağlı)">
       <input type="password" id="mod-key-input" placeholder="Moderatör Şifresi (Varsa)">
@@ -45,6 +53,6 @@
     </form>
   </div>
 
-  <script type="module" src="app.js?v=7"></script>
+  <script type="module" src="app.js?v=8"></script>
 </body>
 </html>
